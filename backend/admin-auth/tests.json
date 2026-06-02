@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "Wrong password returns 401",
+      "method": "POST",
+      "path": "/",
+      "body": {"password": "wrongpassword"},
+      "expectedStatus": 401,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
