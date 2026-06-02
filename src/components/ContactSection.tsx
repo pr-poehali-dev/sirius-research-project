@@ -1,4 +1,25 @@
+import { useEffect, useState } from 'react';
+import { apiGetContent } from '@/lib/api';
+
 export default function ContactSection() {
+  const [phone, setPhone] = useState('+7 (900) 000-00-00');
+  const [phoneHref, setPhoneHref] = useState('tel:+79000000000');
+  const [telegram, setTelegram] = useState('@gaspower_kennel');
+  const [telegramUrl, setTelegramUrl] = useState('https://t.me/');
+  const [vk, setVk] = useState('vk.com/gaspower');
+  const [vkUrl, setVkUrl] = useState('https://vk.com/');
+
+  useEffect(() => {
+    apiGetContent().then((c) => {
+      if (c.contact_phone) setPhone(c.contact_phone);
+      if (c.contact_phone_href) setPhoneHref(c.contact_phone_href);
+      if (c.contact_telegram) setTelegram(c.contact_telegram);
+      if (c.contact_telegram_url) setTelegramUrl(c.contact_telegram_url);
+      if (c.contact_vk) setVk(c.contact_vk);
+      if (c.contact_vk_url) setVkUrl(c.contact_vk_url);
+    });
+  }, []);
+
   return (
     <section id="contacts" className="bg-zinc-900 py-24">
       <div className="container mx-auto px-8 md:px-16">
@@ -17,7 +38,7 @@ export default function ContactSection() {
 
             <div className="space-y-6">
               <a
-                href="tel:+79000000000"
+                href={phoneHref}
                 className="flex items-center gap-4 text-white/70 hover:text-amber-400 transition-colors group"
               >
                 <div className="flex h-12 w-12 items-center justify-center border border-white/20 group-hover:border-amber-400 transition-colors">
@@ -27,12 +48,12 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-xs text-white/40 uppercase tracking-wider mb-0.5">Телефон</p>
-                  <p className="text-white font-medium">+7 (900) 000-00-00</p>
+                  <p className="text-white font-medium">{phone}</p>
                 </div>
               </a>
 
               <a
-                href="https://t.me/"
+                href={telegramUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 text-white/70 hover:text-amber-400 transition-colors group"
@@ -44,12 +65,12 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-xs text-white/40 uppercase tracking-wider mb-0.5">Telegram</p>
-                  <p className="text-white font-medium">@gaspower_kennel</p>
+                  <p className="text-white font-medium">{telegram}</p>
                 </div>
               </a>
 
               <a
-                href="https://vk.com/"
+                href={vkUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 text-white/70 hover:text-amber-400 transition-colors group"
@@ -61,7 +82,7 @@ export default function ContactSection() {
                 </div>
                 <div>
                   <p className="text-xs text-white/40 uppercase tracking-wider mb-0.5">ВКонтакте</p>
-                  <p className="text-white font-medium">vk.com/gaspower</p>
+                  <p className="text-white font-medium">{vk}</p>
                 </div>
               </a>
             </div>

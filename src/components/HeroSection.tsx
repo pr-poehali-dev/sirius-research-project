@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { apiGetContent } from '@/lib/api';
 
-const images = [
+const DEFAULT_IMAGES = [
   'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/76ca5119-568a-45bd-8341-7e611e8a84df.jpg',
   'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/8637afd3-e084-45f5-82f9-b2257ad193de.jpg',
   'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/70c2b0c4-df73-40c8-a93f-a906349866ce.jpg',
@@ -11,15 +12,29 @@ const images = [
 export default function HeroSection() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [images, setImages] = useState<string[]>(DEFAULT_IMAGES);
+  const [title, setTitle] = useState('GASPOWER');
+  const [subtitle, setSubtitle] = useState('Кангальская овчарка');
+  const [description, setDescription] = useState('Разведение чистокровных кангалов с выдающимися рабочими качествами и безупречной родословной.');
+
+  useEffect(() => {
+    apiGetContent().then((c) => {
+      if (c.hero_title) setTitle(c.hero_title);
+      if (c.hero_subtitle) setSubtitle(c.hero_subtitle);
+      if (c.hero_description) setDescription(c.hero_description);
+      if (c.hero_images) {
+        try { const imgs = JSON.parse(c.hero_images); if (imgs.length) setImages(imgs); } catch (e) { console.warn(e); }
+      }
+    });
+  }, []);
 
   useEffect(() => {
     setIsLoaded(true);
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % images.length);
     }, 4000);
-
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
@@ -57,13 +72,13 @@ export default function HeroSection() {
                 <span className="text-amber-400 text-sm font-medium uppercase tracking-widest">Питомник</span>
               </div>
               <h1 className="text-5xl font-bold text-white md:text-6xl lg:text-7xl tracking-tight">
-                GASPOWER
+                {title}
               </h1>
               <p className="text-xl font-light text-white/80 mt-3 md:text-2xl">
-                Кангальская овчарка
+                {subtitle}
               </p>
               <p className="text-white/60 mt-4 text-base max-w-md leading-relaxed">
-                Разведение чистокровных кангалов с выдающимися рабочими качествами и безупречной родословной.
+                {description}
               </p>
             </div>
 

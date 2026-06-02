@@ -1,4 +1,19 @@
+import { useEffect, useState } from 'react';
+import { apiGetContent } from '@/lib/api';
+
 export default function AboutSection() {
+  const [title, setTitle] = useState('GASPOWER — сила и характер');
+  const [text1, setText1] = useState('Мы занимаемся разведением кангальских овчарок — одной из древнейших и мощнейших пород мира. Наш питомник основан на принципах здоровья, темперамента и соответствия стандарту породы.');
+  const [text2, setText2] = useState('Каждый щенок GASPOWER рождается в любви, проходит ветеринарный контроль, вакцинацию и получает документы РКФ. Мы тщательно подбираем пары, чтобы сохранить лучшие качества породы.');
+
+  useEffect(() => {
+    apiGetContent().then((c) => {
+      if (c.about_title) setTitle(c.about_title);
+      if (c.about_text1) setText1(c.about_text1);
+      if (c.about_text2) setText2(c.about_text2);
+    });
+  }, []);
+
   const facts = [
     { number: '10+', label: 'лет разведения' },
     { number: '50+', label: 'щенков в добрые руки' },
@@ -15,15 +30,9 @@ export default function AboutSection() {
               <div className="h-px w-12 bg-amber-400" />
               <span className="text-amber-400 text-sm font-medium uppercase tracking-widest">О питомнике</span>
             </div>
-            <h2 className="text-4xl font-bold text-white mb-6">
-              GASPOWER — <br />сила и характер
-            </h2>
-            <p className="text-white/70 text-lg leading-relaxed mb-4">
-              Мы занимаемся разведением кангальских овчарок — одной из древнейших и мощнейших пород мира. Наш питомник основан на принципах здоровья, темперамента и соответствия стандарту породы.
-            </p>
-            <p className="text-white/70 text-lg leading-relaxed">
-              Каждый щенок GASPOWER рождается в любви, проходит ветеринарный контроль, вакцинацию и получает документы РКФ. Мы тщательно подбираем пары, чтобы сохранить лучшие качества породы.
-            </p>
+            <h2 className="text-4xl font-bold text-white mb-6">{title}</h2>
+            <p className="text-white/70 text-lg leading-relaxed mb-4">{text1}</p>
+            <p className="text-white/70 text-lg leading-relaxed">{text2}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-6">

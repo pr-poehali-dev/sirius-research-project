@@ -1,28 +1,15 @@
-const dogs = [
-  {
-    name: 'GasPower Arslan',
-    title: 'Производитель | Чемпион России',
-    age: '4 года',
-    image: 'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/76ca5119-568a-45bd-8341-7e611e8a84df.jpg',
-    desc: 'Выдающийся кобель с импозантным экстерьером и отличным здоровьем. Многократный победитель выставок.',
-  },
-  {
-    name: 'GasPower Zara',
-    title: 'Производительница',
-    age: '3 года',
-    image: 'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/ea2439a9-08ae-4f3d-b8e7-9d4b8c82749a.jpg',
-    desc: 'Великолепная сука с материнским инстинктом. Её щенки отличаются крепким телосложением и ровным характером.',
-  },
-  {
-    name: 'Помёт GASPOWER',
-    title: 'Щенки • Есть в наличии',
-    age: '2 месяца',
-    image: 'https://cdn.poehali.dev/projects/1d5e1d48-86d9-45a1-af89-a126fe2acc90/files/8637afd3-e084-45f5-82f9-b2257ad193de.jpg',
-    desc: 'Щенки кангальской овчарки с документами РКФ. Вакцинированы, проглистованы, социализированы.',
-  },
-];
+import { useEffect, useState } from 'react';
+import { apiGetDogs } from '@/lib/api';
+
+type Dog = { id: number; name: string; title: string; age: string; image: string; desc: string };
 
 export default function DogsSection() {
+  const [dogs, setDogs] = useState<Dog[]>([]);
+
+  useEffect(() => {
+    apiGetDogs().then(setDogs);
+  }, []);
+
   return (
     <section id="dogs" className="bg-black py-24">
       <div className="container mx-auto px-8 md:px-16">
@@ -36,7 +23,7 @@ export default function DogsSection() {
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           {dogs.map((dog) => (
-            <div key={dog.name} className="group overflow-hidden bg-zinc-900">
+            <div key={dog.id} className="group overflow-hidden bg-zinc-900">
               <div className="relative h-72 overflow-hidden">
                 <img
                   src={dog.image}
